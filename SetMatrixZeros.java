@@ -40,64 +40,62 @@ class Bruteforce {
     }
 }
 
-class Optimal{
-
-    // TC: O(MN) SP: O(1)
-    public void setRowToZero(int[][] matrix,int row){
-        for(int i=1;i<matrix[0].length;i++){
-            matrix[row][i] = 0;
-        }
-    }
-
-    public void setColToZero(int[][] matrix,int col){
-        for(int i=1;i<matrix.length;i++){
-            matrix[i][col] = 0;
-        }
-    }
-
-    public void handleEdgeCase(int[][] matrix,boolean[] verifier){
-        if(verifier[0] && verifier[1] || verifier[2]){
-            setRowToZero(matrix,0);
-            setColToZero(matrix,0);
-        }
-        else if(verifier[0]){
-            setRowToZero(matrix,0);
-        }
-        else if(verifier[1]){
-            setColToZero(matrix,0);
-        }
-    }
-
+class Optimal {
     public void setZeroes(int[][] matrix) {
-        //setting up matrix row and col to zero as a marker to make the corresponding row and col to zero
-        int col = matrix[0].length, row = matrix.length;
-        boolean[] verifier = new boolean[3];
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                if(matrix[i][j] == 0){
-                    System.out.println(i+"->"+j);
-                    verifier[0] = (i == 0 || verifier[0]) ? true : false;
-                    verifier[1] = (j == 0 || verifier[1]) ? true : false;
-                    verifier[2] = ((i == 0 && j == 0) || verifier[2]) ? true: false;
+        int col = matrix[0].length;
+        int row = matrix.length;
+        boolean firstRowHasZero = false;
+        boolean firstColHasZero = false;
+
+        // Check if the first row and first column need to be set to zero
+        for (int i = 0; i < col; i++) {
+            if (matrix[0][i] == 0) {
+                firstRowHasZero = true;
+                break;
+            }
+        }
+
+        for (int i = 0; i < row; i++) {
+            if (matrix[i][0] == 0) {
+                firstColHasZero = true;
+                break;
+            }
+        }
+
+        // Iterate over the matrix and use the first row and first column as markers
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][j] == 0) {
                     matrix[i][0] = 0;
                     matrix[0][j] = 0;
                 }
             }
         }
-        // System.out.println(Arrays.toString(verifier));
-        for(int i=1;i<col;i++){
-            if(matrix[0][i] == 0){
-                setColToZero(matrix,i);
-            }
-        } 
-        for(int i=1;i<row;i++){
-            if(matrix[i][0] == 0){
-                setRowToZero(matrix,i);
+
+        // Set rows and columns (excluding the first row and first column) to zero
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
             }
         }
-        handleEdgeCase(matrix,verifier);
+
+        // Set the first row and first column to zero if necessary
+        if (firstRowHasZero) {
+            for (int i = 0; i < col; i++) {
+                matrix[0][i] = 0;
+            }
+        }
+
+        if (firstColHasZero) {
+            for (int i = 0; i < row; i++) {
+                matrix[i][0] = 0;
+            }
+        }
     }
 }
+
 
 public class SetMatrixZeros{
     public static void main(String[] args) {
