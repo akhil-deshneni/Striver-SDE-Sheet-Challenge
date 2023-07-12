@@ -67,7 +67,12 @@ class reverseNodes {
 
     public void printer(Node head){
         while(head != null){
-            System.out.print(head.data+"->");
+            if(head.next != null){
+                System.out.print(head.data+"->");
+            }
+            else{
+                System.out.print(head.data);
+            }
             head = head.next;
         }
     }
